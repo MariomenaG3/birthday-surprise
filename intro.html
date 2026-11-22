@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>H.B.D YA JOYAAAAA ❤️🫂</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #050505;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      direction: rtl;
+      text-align: center;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #fireworksCanvas,
+    #heartCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    #fireworksCanvas {
+      z-index: 1;
+    }
+
+    #heartCanvas {
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, transparent 0%, #050505 85%);
+      z-index: 3;
+    }
+
+    .content {
+      position: relative;
+      z-index: 4;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #d50000;
+      text-shadow: 0 0 40px rgb(8, 0, 255);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.5s ease-in-out 0.5s, transform 1.5s ease-in-out 0.5s;
+    }
+
+    h1.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    p {
+      font-size: 1.3rem;
+      color: #ee07d3;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.5s ease-in-out 1s, transform 1.5s ease-in-out 1s;
+    }
+
+    p.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .next-btn {
+      background: linear-gradient(135deg, #ff0066, #cc0066);
+      color: white;
+      border: none;
+      padding: 18px 50px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 10px 40px rgba(255, 0, 102, 0.8);
+      transition: transform 0.2s, box-shadow 0.2s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.5s ease-in-out 1.5s, transform 1.5s ease-in-out 1.5s;
+    }
+
+    .next-btn.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 50px rgba(255, 0, 102, 1);
+    }
+
+    .next-btn:active {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      p { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="fireworksCanvas"></canvas>
+  <canvas id="heartCanvas"></canvas>
+  <div class="overlay"></div>
+
+  <div class="content">
+    <h1>❤️🫂 H.B.D YA JOYAAAAA </h1> 
+    <p>مفاجأة خاصة ليكي يا حبيبي ❤️</p>
+    <button class="next-btn" onclick="goToMessage()">بصباعك المقنن ودوسي هنا ❤️➡️</button>
+  </div>
+
+  <script>
+    // ==================== الألعاب النارية القوية ====================
+    const fwCanvas = document.getElementById('fireworksCanvas');
+    const fwCtx = fwCanvas.getContext('2d');
+    fwCanvas.width = window.innerWidth;
+    fwCanvas.height = window.innerHeight;
+
+    fwCtx.shadowBlur = 15;
+    fwCtx.shadowColor = '#ffffff';
+
+    let fwParticles = [];
+
+    const vividColors = [
+      '#ff00ff', '#00ffff', '#ffff00', '#ff0066', '#00ff00',
+      '#ff9900', '#9900ff', '#00ffcc', '#ffffff', '#ff3366'
+    ];
+
+    class FWParticle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.size = Math.random() * 3 + 2;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 10 + 5;
+        this.speedX = Math.cos(angle) * speed;
+        this.speedY = Math.sin(angle) * speed;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.015 + 0.01;
+        this.gravity = 0.15;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += this.gravity;
+        this.alpha -= this.decay;
+        this.size *= 0.96;
+      }
+      draw() {
+        fwCtx.globalAlpha = this.alpha;
+        fwCtx.fillStyle = this.color;
+        fwCtx.shadowBlur = 20;
+        fwCtx.shadowColor = this.color;
+        fwCtx.beginPath();
+        fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        fwCtx.fill();
+        fwCtx.shadowBlur = 0;
+      }
+    }
+
+    function createFirework(x, y) {
+      const color = vividColors[Math.floor(Math.random() * vividColors.length)];
+      const particleCount = 80 + Math.floor(Math.random() * 40);
+      for (let i = 0; i < particleCount; i++) {
+        fwParticles.push(new FWParticle(x, y, color));
+      }
+    }
+
+    // ==================== القلب المتوهج (يظهر بعد 12 ثانية) ====================
+    const hCanvas = document.getElementById('heartCanvas');
+    const hCtx = hCanvas.getContext('2d');
+    hCanvas.width = window.innerWidth;
+    hCanvas.height = window.innerHeight;
+
+    let heartParticles = [];
+    const heartPoints = [];
+
+    function createHeartShape() {
+      heartPoints.length = 0;
+      const centerX = hCanvas.width / 2;
+      const centerY = hCanvas.height / 2 - 60;
+      const scale = 22;
+
+      for (let t = 0; t < Math.PI * 2; t += 0.02) {
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        heartPoints.push({
+          x: centerX + x * scale,
+          y: centerY + y * scale
+        });
+      }
+    }
+
+    class HeartParticle {
+      constructor() {
+        this.init();
+      }
+
+      init() {
+        const point = heartPoints[Math.floor(Math.random() * heartPoints.length)];
+        this.x = point.x + (Math.random() - 0.5) * 30;
+        this.y = point.y + (Math.random() - 0.5) * 30;
+        this.targetX = point.x;
+        this.targetY = point.y;
+        this.size = Math.random() * 3 + 1;
+        this.speed = Math.random() * 0.04 + 0.02;
+        this.color = `hsl(${Math.random() * 40 + 130}, 100%, 50%)`;
+        this.alpha = Math.random();
+      }
+
+      update() {
+        const dx = this.targetX - this.x;
+        const dy = this.targetY - this.y;
+        this.x += dx * this.speed;
+        this.y += dy * this.speed;
+        this.x += (Math.random() - 0.5) * 0.6;
+        this.y += (Math.random() - 0.5) * 0.6;
+      }
+
+      draw() {
+        hCtx.globalAlpha = this.alpha;
+        hCtx.fillStyle = this.color;
+        hCtx.shadowBlur = 15;
+        hCtx.shadowColor = this.color;
+        hCtx.beginPath();
+        hCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        hCtx.fill();
+        hCtx.shadowBlur = 0;
+      }
+    }
+
+    function initHeartParticles() {
+      heartParticles = [];
+      for (let i = 0; i < 350; i++) {
+        heartParticles.push(new HeartParticle());
+      }
+    }
+
+    // ==================== الحركات ====================
+    function animate() {
+      fwCtx.fillStyle = 'rgba(5, 5, 5, 0.25)';
+      fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+
+      hCtx.fillStyle = 'rgba(5, 5, 5, 0.2)';
+      hCtx.fillRect(0, 0, hCanvas.width, hCanvas.height);
+
+      hCtx.strokeStyle = 'rgba(0, 255, 136, 0.15)';
+      hCtx.lineWidth = 2;
+      hCtx.beginPath();
+      if (heartPoints.length > 0) {
+        hCtx.moveTo(heartPoints[0].x, heartPoints[0].y);
+        for (let i = 1; i < heartPoints.length; i++) {
+          hCtx.lineTo(heartPoints[i].x, heartPoints[i].y);
+        }
+        hCtx.closePath();
+        hCtx.stroke();
+      }
+
+      for (let i = fwParticles.length - 1; i >= 0; i--) {
+        fwParticles[i].update();
+        fwParticles[i].draw();
+        if (fwParticles[i].alpha <= 0 || fwParticles[i].size < 0.3) {
+          fwParticles.splice(i, 1);
+        }
+      }
+
+      heartParticles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      if (Math.random() < 0.03) {
+        createFirework(
+          Math.random() * fwCanvas.width,
+          Math.random() * fwCanvas.height / 2
+        );
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      fwCanvas.width = window.innerWidth;
+      fwCanvas.height = window.innerHeight;
+      hCanvas.width = window.innerWidth;
+      hCanvas.height = window.innerHeight;
+      createHeartShape();
+      initHeartParticles();
+    });
+
+    createHeartShape();
+    initHeartParticles();
+    animate();
+
+    // بعد 12 ثانية يظهر القلب والمحتوى
+    setTimeout(() => {
+      document.getElementById('heartCanvas').style.opacity = '1';
+      document.querySelector('.content').style.opacity = '1';
+      document.querySelector('h1').classList.add('show');
+      document.querySelector('p').classList.add('show');
+      document.querySelector('.next-btn').classList.add('show');
+    }, 12000);
+
+    function goToMessage() {
+      window.location.href = "message.html";
+    }
+  </script>
+</body>
+</html>
